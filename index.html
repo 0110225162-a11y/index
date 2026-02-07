@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osis MAS Miftahul Ulum 2024/2025</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        dark: '#0f172a',    // Slate 900
+                        primary: '#ca8a04', // Yellow 600 (Gold)
+                        surface: '#f8fafc', // Slate 50
+                        subtle: '#94a3b8',  // Slate 400
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600&q=80')",
+                    },
+                    transitionDuration: {
+                        '700': '700ms',
+                        '1000': '1000ms',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)', filter: 'blur(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- MODERN SCROLLBAR (Floating Pill Style) --- */
+        
+        /* Firefox Support */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+
+        /* Webkit (Chrome, Edge, Safari) */
+        ::-webkit-scrollbar {
+            width: 10px; /* Sedikit lebih lebar untuk memberi ruang padding */
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent; /* Track transparan agar menyatu dengan background */
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background-color: #94a3b8; /* Warna default (Slate 400) */
+            border-radius: 9999px; /* Bulat sempurna */
+            border: 3px solid transparent; /* Trik agar terlihat 'mengambang' */
+            background-clip: content-box; /* Warna hanya di dalam border */
+            transition: background-color 0.3s ease;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #ca8a04; /* Warna Emas saat di-hover */
+        }
+
+        /* Dark Mode Adjustment for Scrollbar */
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: #475569; /* Slate 600 untuk dark mode */
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background-color: #ca8a04;
+        }
+
+        /* --- END SCROLLBAR --- */
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #0f172a;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+        }
+        .loader-line {
+            width: 0%;
+            height: 2px;
+            background-color: #ca8a04;
+            transition: width 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        /* --- CINEMATIC REVEAL ANIMATION (UPDATED) --- */
+        .reveal {
+            opacity: 0;
+            /* Start: Sedikit turun, sedikit kecil, dan blur */
+            transform: translateY(40px) scale(0.95);
+            filter: blur(10px); 
+            /* Transition: Sangat smooth dengan durasi berbeda untuk tiap properti */
+            transition: 
+                opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform, filter;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        /* Staggered Delay Utilities */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- MODERN CURSOR STYLES --- */
+        @media (min-width: 768px) {
+            body { cursor: none; }
+            
+            #cursor-dot, #cursor-outline {
+                position: fixed;
+                top: 0; left: 0;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+            }
+
+            #cursor-dot {
+                width: 6px;
+                height: 6px;
+                background-color: #ca8a04;
+                transition: transform 0.1s;
+            }
+
+            #cursor-outline {
+                width: 32px;
+                height: 32px;
+                border: 1px solid rgba(202, 138, 4, 0.4);
+                transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                            height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                            background-color 0.3s,
+                            transform 0.1s;
+            }
+
+            body.hovering #cursor-outline {
+                width: 50px;
+                height: 50px;
+                background-color: rgba(202, 138, 4, 0.1);
+                border-color: rgba(202, 138, 4, 0.3);
+                backdrop-filter: blur(2px);
+            }
+            body.hovering #cursor-dot {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0.8;
+            }
+
+            body.clicking #cursor-outline {
+                width: 20px;
+                height: 20px;
+                background-color: rgba(202, 138, 4, 0.5);
+            }
+        }
+
+        /* Image Zoom Transition */
+        .img-zoom-container {
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        .img-zoom-container img {
+            /* Smooth zoom effect */
+            transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+            filter: grayscale(100%);
+            transform: scale(1.01); /* Prevent pixelation shift */
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+
+        /* Text Underline Animation */
+        .hover-underline-animation {
+            display: inline-block;
+            position: relative;
+        }
+        .hover-underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: currentColor;
+            transform-origin: bottom right;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .hover-underline-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    </style>
+</head>
+<body class="bg-surface dark:bg-dark text-dark dark:text-gray-200 font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white transition-colors duration-700 ease-in-out">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="text-center">
+            <h1 class="text-3xl font-serif font-bold text-white mb-4 tracking-[0.2em] animate-pulse">ALUMNI<span class="text-primary">.</span>24</h1>
+            <div class="w-48 h-[1px] bg-gray-800 rounded-full overflow-hidden mx-auto">
+                <div class="loader-line h-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot" class="hidden md:block"></div>
+    <div id="cursor-outline" class="hidden md:block"></div>
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="fixed top-24 right-6 md:top-8 md:right-24 z-50 p-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-dark dark:text-white hover:bg-white/10 transition-all duration-300 hover:scale-110 group cursor-hover shadow-lg">
+        <i data-lucide="sun" class="w-5 h-5 hidden dark:block transition-transform duration-500 rotate-0 dark:rotate-90"></i>
+        <i data-lucide="moon" class="w-5 h-5 block dark:hidden transition-transform duration-500 rotate-0 hover:-rotate-12"></i>
+    </button>
+    
+    <!-- Audio Element -->
+    <!-- Ganti 'pileuleuyan.mp3' dengan file musik Anda jika namanya berbeda -->
+    <!-- Jika file tidak ditemukan, akan muncul alert -->
+    <audio id="bg-audio" loop>
+        <source src="pileuleuyan.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music Player Widget -->
+    <div class="fixed bottom-8 right-8 z-50 flex items-center gap-4 reveal active transition-all duration-500 hover:scale-105 cursor-hover opacity-0 translate-y-10 animate-fade-in-up" style="animation-delay: 2s; animation-fill-mode: forwards;" id="music-player">
+        <div class="glass-dark px-5 py-3 rounded-full shadow-2xl flex items-center gap-4 border border-white/10">
+            <div class="relative">
+                <!-- Visualizer bars animation controlled by JS -->
+                <div class="w-8 h-8 flex items-center justify-center gap-[2px] music-visualizer">
+                    <div class="w-1 bg-green-500 h-2 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-green-500 h-4 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-green-500 h-3 rounded-full transition-all duration-300"></div>
+                    <div class="w-1 bg-green-500 h-5 rounded-full transition-all duration-300"></div>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-semibold">Now Playing</span>
+                <span class="text-xs font-bold text-white tracking-wide">Pileuleuyan - Sunda</span>
+            </div>
+            <button onclick="toggleMusic()" id="audio-btn" class="ml-2 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/20 rounded-full text-white transition-all duration-300 cursor-hover active:scale-95">
+                <i data-lucide="play" class="w-4 h-4" id="audio-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 transition-all duration-500 ease-in-out" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between h-24 items-center">
+                <a href="#" class="text-2xl font-serif font-bold tracking-tight text-dark dark:text-white group cursor-hover transition-colors duration-500 relative z-50">
+                    Osis<span class="text-primary group-hover:text-yellow-400 transition-colors">.</span>24
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-12">
+                    <a href="#home" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-dark dark:hover:text-white transition-colors relative py-2 group cursor-hover hover-underline-animation">
+                        Beranda
+                    </a>
+                    <a href="#stats" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-dark dark:hover:text-white transition-colors relative py-2 group cursor-hover hover-underline-animation">
+                        Statistik
+                    </a>
+                    <a href="#timeline" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-dark dark:hover:text-white transition-colors relative py-2 group cursor-hover hover-underline-animation">
+                        Perjalanan
+                    </a>
+                    <a href="#gallery" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-dark dark:hover:text-white transition-colors relative py-2 group cursor-hover hover-underline-animation">
+                        Galeri
+                    </a>
+                    <a href="#wall" class="px-6 py-3 bg-dark dark:bg-white text-white dark:text-dark text-xs font-bold tracking-widest uppercase rounded-sm transition-all duration-300 hover:bg-primary dark:hover:bg-primary hover:text-white hover:shadow-lg hover:-translate-y-1 cursor-hover">
+                        Guestbook
+                    </a>
+                </div>
+
+                 <!-- Mobile Menu Button -->
+                 <button class="md:hidden text-dark dark:text-white cursor-hover p-2" onclick="alert('Menu mobile dapat ditambahkan di sini')">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
+        <!-- Parallax Background -->
+        <div class="absolute inset-0 bg-hero-pattern bg-cover bg-center opacity-60 dark:opacity-40 scale-105 transition-transform duration-100 ease-linear will-change-transform" id="hero-bg"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface dark:from-dark via-surface/60 dark:via-dark/60 to-transparent transition-colors duration-700"></div>
+        
+        <div class="relative z-10 text-center max-w-4xl px-6">
+            <div class="opacity-0 translate-y-8 blur-sm animate-fade-in-up" style="animation-delay: 0.8s;">
+                <span class="inline-block py-1.5 px-4 border border-dark/10 dark:border-white/20 rounded-full bg-white/40 dark:bg-white/5 backdrop-blur-md text-dark dark:text-gray-300 text-[10px] font-bold tracking-[0.2em] uppercase mb-8 shadow-sm">
+                    Osis MAS Miftahul Ulum 2024/2025
+                </span>
+            </div>
+            
+            <h1 class="text-6xl md:text-9xl font-serif font-bold text-dark dark:text-white mb-6 leading-tight tracking-tighter mix-blend-overlay dark:mix-blend-normal">
+                <span class="block opacity-0 translate-y-10 blur-sm animate-fade-in-up" style="animation-delay: 1s;">Class of</span>
+                <span class="block opacity-0 translate-y-10 blur-sm animate-fade-in-up text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-300 pb-2" style="animation-delay: 1.2s;">2024</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-700 dark:text-gray-400 mb-12 max-w-xl mx-auto font-light leading-relaxed opacity-0 translate-y-8 blur-sm animate-fade-in-up" style="animation-delay: 1.4s;">
+                Sebuah arsip digital untuk mengenang perjalanan, persahabatan, dan momen yang membentuk siapa kita hari ini.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center opacity-0 translate-y-8 blur-sm animate-fade-in-up" style="animation-delay: 1.6s;">
+                <a href="#gallery" class="group px-8 py-4 bg-dark dark:bg-white text-white dark:text-dark font-medium text-sm tracking-widest uppercase rounded-sm hover:bg-primary dark:hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center gap-3 cursor-hover shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                    Jelajahi Arsip <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                </a>
+                <a href="#timeline" class="px-8 py-4 border border-dark/30 dark:border-white/30 text-dark dark:text-white font-medium text-sm tracking-widest uppercase rounded-sm hover:bg-dark/5 dark:hover:bg-white/10 transition duration-300 backdrop-blur-sm cursor-hover hover:border-dark dark:hover:border-white">
+                    Lihat Timeline
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float opacity-0 animate-fade-in-up" style="animation-delay: 2.5s;">
+            <i data-lucide="chevron-down" class="text-dark/50 dark:text-white/50 w-6 h-6"></i>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section id="stats" class="py-24 bg-dark border-b border-gray-800 transition-colors duration-700">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center divide-x divide-gray-800/50">
+                <div class="reveal group cursor-default hover:scale-105 transition-transform duration-500">
+                    <span class="block text-5xl md:text-6xl font-serif font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300">1</span>
+                    <span class="text-xs text-gray-500 uppercase tracking-[0.2em] group-hover:text-gray-300 transition-colors">Periode</span>
+                </div>
+                <div class="reveal group cursor-default delay-100 hover:scale-105 transition-transform duration-500">
+                    <span class="block text-5xl md:text-6xl font-serif font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300">12</span>
+                    <span class="text-xs text-gray-500 uppercase tracking-[0.2em] group-hover:text-gray-300 transition-colors">Bulan</span>
+                </div>
+                <div class="reveal group cursor-default delay-200 hover:scale-105 transition-transform duration-500">
+                    <span class="block text-5xl md:text-6xl font-serif font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300">1</span>
+                    <span class="text-xs text-gray-500 uppercase tracking-[0.2em] group-hover:text-gray-300 transition-colors">Organisasi</span>
+                </div>
+                <div class="reveal group cursor-default delay-300 hover:scale-105 transition-transform duration-500">
+                    <span class="block text-5xl md:text-6xl font-serif font-bold text-white mb-2 group-hover:text-primary transition-colors duration-300">∞</span>
+                    <span class="text-xs text-gray-500 uppercase tracking-[0.2em] group-hover:text-gray-300 transition-colors">Kenangan</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="py-32 bg-surface dark:bg-dark transition-colors duration-700 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-dark dark:text-white mb-6">Perjalanan Kita</h2>
+                <div class="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="relative">
+                <!-- Vertical Line -->
+                <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800 md:-translate-x-1/2"></div>
+
+                <!-- Item 1 (Left) -->
+                <div class="relative z-10 mb-24 md:flex items-center justify-between w-full reveal">
+                    <div class="md:w-5/12 order-2 md:order-1 text-left md:text-right pr-0 md:pr-16">
+                        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-3 block">Desember 2023</span>
+                        <h3 class="text-3xl font-bold text-dark dark:text-white mb-4">Awal Pertemuan</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm md:text-base">
+                            Momen pertama menginjakkan kaki di Osis. Wajah-wajah asing yang perlahan menjadi keluarga. jas Almamater hijau tua muda berganti jas Almamater putih abu-abu dengan penuh harapan.
+                        </p>
+                    </div>
+                    <div class="md:w-2/12 flex justify-center order-1 md:order-2 my-6 md:my-0">
+                        <div class="w-5 h-5 bg-surface dark:bg-dark border-4 border-primary rounded-full shadow-[0_0_20px_rgba(202,138,4,0.5)] z-20"></div>
+                    </div>
+                    <div class="md:w-5/12 order-3 md:order-3 pl-0 md:pl-16">
+                        <div class="aspect-video bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-2xl img-zoom-container cursor-hover group relative" onclick="openLightbox(this)">
+                            <img src="zikra3.jpg" class="w-full h-full object-cover">
+                            <!-- Overlay Hint -->
+                            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <i data-lucide="maximize-2" class="w-8 h-8 text-white drop-shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 (Right) -->
+                <div class="relative z-10 mb-24 md:flex items-center justify-between w-full reveal">
+                    <div class="md:w-5/12 order-3 md:order-1 text-left md:text-right pr-0 md:pr-16">
+                         <div class="aspect-video bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-2xl img-zoom-container cursor-hover group relative" onclick="openLightbox(this)">
+                            <img src="z2.jpg" class="w-full h-full object-cover">
+                            <!-- Overlay Hint -->
+                            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <i data-lucide="maximize-2" class="w-8 h-8 text-white drop-shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-2/12 flex justify-center order-1 md:order-2 my-6 md:my-0">
+                        <div class="w-5 h-5 bg-surface dark:bg-dark border-4 border-gray-300 dark:border-gray-600 rounded-full shadow-lg z-20"></div>
+                    </div>
+                    <div class="md:w-5/12 order-2 md:order-3 pl-0 md:pl-16">
+                        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-3 block">Januari 2024</span>
+                        <h3 class="text-3xl font-bold text-dark dark:text-white mb-4">Masa Kepemimpinan</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm md:text-base">
+                            Masa-masa paling solid. Dari LDKS yang kompetitif sampai Masa memimpin yang penuh tawa di perjalanan yang sulit. Kenangan yang tak tergantikan di setiap detiknya.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 3 (Left) -->
+                <div class="relative z-10 md:flex items-center justify-between w-full reveal">
+                    <div class="md:w-5/12 order-2 md:order-1 text-left md:text-right pr-0 md:pr-16">
+                        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-3 block">Desember 2024</span>
+                        <h3 class="text-3xl font-bold text-dark dark:text-white mb-4">Farewell Day</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm md:text-base">
+                            Akhir dari sebuah era Kepemimpinan, awal dari masa depan. Janji untuk sukses bersama terucap di tengah haru Abu perpisahan. Sampai jumpa di puncak!
+                        </p>
+                    </div>
+                    <div class="md:w-2/12 flex justify-center order-1 md:order-2 my-6 md:my-0">
+                        <div class="w-5 h-5 bg-surface dark:bg-dark border-4 border-primary rounded-full shadow-[0_0_20px_rgba(202,138,4,0.5)] z-20"></div>
+                    </div>
+                    <div class="md:w-5/12 order-3 md:order-3 pl-0 md:pl-16">
+                        <div class="aspect-video bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-2xl img-zoom-container cursor-hover group relative" onclick="openLightbox(this)">
+                            <img src="zikra4 (1).jpg" class="w-full h-full object-cover">
+                             <!-- Overlay Hint -->
+                             <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <i data-lucide="maximize-2" class="w-8 h-8 text-white drop-shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-32 bg-dark text-white relative">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20 reveal">
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-serif font-bold mb-6">Arsip Visual</h2>
+                    <p class="text-gray-400 max-w-md leading-relaxed">Kumpulan fragmen memori yang tertangkap kamera, abadi dalam piksel selamanya.</p>
+                </div>
+                <!-- Filter Tabs -->
+                <div class="flex gap-8 mt-10 md:mt-0 border-b border-gray-800 pb-4">
+                    <button class="text-primary font-medium text-sm pb-4 border-b-2 border-primary -mb-5 transition cursor-hover tracking-wide">Semua</button>
+                    <button class="text-gray-500 hover:text-white font-medium text-sm pb-4 transition cursor-hover tracking-wide hover:text-primary">Kelas</button>
+                    <button class="text-gray-500 hover:text-white font-medium text-sm pb-4 transition cursor-hover tracking-wide hover:text-primary">Event</button>
+                    <button class="text-gray-500 hover:text-white font-medium text-sm pb-4 transition cursor-hover tracking-wide hover:text-primary">Candid</button>
+                </div>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-1" id="gallery-grid">
+                <!-- Large Item -->
+                <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden cursor-hover reveal" onclick="openLightbox(this)">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-700 z-10 flex items-center justify-center">
+                        <span class="border border-white/50 text-white px-6 py-2 rounded-full uppercase text-xs tracking-[0.2em] backdrop-blur-md transform translate-y-4 group-hover:translate-y-0 transition duration-500">Lihat Foto</span>
+                    </div>
+                    <img src="z1.jpg" class="w-full h-full object-cover transition transform duration-1000 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                    <div class="absolute bottom-8 left-8 z-20">
+                        <span class="text-primary text-xs font-bold uppercase tracking-widest mb-1 block opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition duration-500 delay-100">Highlight</span>
+                        <h4 class="text-2xl font-serif font-bold text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition duration-500 delay-200">Sahabat Selamanya</h4>
+                    </div>
+                </div>
+
+                <!-- Regular Items -->
+                <div class="relative aspect-square group overflow-hidden cursor-hover reveal delay-100" onclick="openLightbox(this)">
+                    <img src="zikra5 (2).jpg" class="w-full h-full object-cover transition transform duration-1000 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                     <div class="absolute inset-0 bg-primary/80 mix-blend-multiply opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-10">
+                        <i data-lucide="plus" class="w-8 h-8 text-white"></i>
+                     </div>
+                </div>
+
+                <div class="relative aspect-square group overflow-hidden cursor-hover reveal delay-200" onclick="openLightbox(this)">
+                    <img src="z.jpg" class="w-full h-full object-cover transition transform duration-1000 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                     <div class="absolute inset-0 bg-primary/80 mix-blend-multiply opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-10">
+                        <i data-lucide="plus" class="w-8 h-8 text-white"></i>
+                     </div>
+                </div>
+                
+                <div class="relative aspect-square group overflow-hidden cursor-hover reveal delay-300" onclick="openLightbox(this)">
+                    <img src="zikra5 (2).jpg" class="w-full h-full object-cover transition transform duration-1000 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                      <div class="absolute inset-0 bg-primary/80 mix-blend-multiply opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-10">
+                        <i data-lucide="plus" class="w-8 h-8 text-white"></i>
+                     </div>
+                </div>
+
+                 <div class="md:col-span-2 relative aspect-[2/1] group overflow-hidden cursor-hover reveal delay-400" onclick="openLightbox(this)">
+                    <img src="zikra1.jpg" class="w-full h-full object-cover transition transform duration-1000 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                      <div class="absolute inset-0 bg-primary/80 mix-blend-multiply opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-10">
+                        <i data-lucide="plus" class="w-8 h-8 text-white"></i>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guestbook Section -->
+    <section id="wall" class="py-32 bg-gray-50 dark:bg-slate-900 transition-colors duration-700">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-dark dark:text-white mb-6">Buku Tamu</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-lg mx-auto leading-relaxed">Tinggalkan jejak, pesan, atau harapan. Biarkan kata-katamu menjadi bagian dari sejarah.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                <!-- Form -->
+                <div class="bg-white dark:bg-slate-800 p-10 shadow-2xl shadow-gray-200/50 dark:shadow-none rounded-sm border border-gray-100 dark:border-slate-700 reveal transition-all duration-500 sticky top-32">
+                    <h3 class="text-2xl font-serif font-bold mb-8 text-dark dark:text-white">Tinggalkan Pesan</h3>
+                    <form id="messageForm" onsubmit="addMessage(event)" class="space-y-8">
+                        <div class="group relative">
+                            <input type="text" id="senderName" class="peer w-full border-b border-gray-300 dark:border-gray-600 py-3 focus:border-primary focus:outline-none transition-colors bg-transparent text-dark dark:text-gray-100 cursor-hover placeholder-transparent" placeholder="Nama">
+                            <label class="absolute left-0 -top-3.5 text-xs text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary">Nama Lengkap</label>
+                        </div>
+                        <div class="group relative">
+                            <textarea id="senderMsg" rows="4" required class="peer w-full border-b border-gray-300 dark:border-gray-600 py-3 focus:border-primary focus:outline-none transition-colors bg-transparent resize-none text-dark dark:text-gray-100 cursor-hover placeholder-transparent" placeholder="Pesan"></textarea>
+                            <label class="absolute left-0 -top-3.5 text-xs text-gray-500 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary">Pesan Anda</label>
+                        </div>
+                        <button type="submit" class="w-full bg-dark dark:bg-white text-white dark:text-dark font-bold py-4 hover:bg-primary dark:hover:bg-primary hover:text-white transition-all duration-300 text-xs tracking-[0.2em] uppercase cursor-hover shadow-lg hover:shadow-xl hover:-translate-y-1">
+                            Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Messages Feed -->
+                <div class="space-y-8" id="wall-container">
+                    <!-- Message Card -->
+                    <div class="bg-white dark:bg-slate-800 p-8 shadow-sm border-l-4 border-primary reveal transition-colors duration-500 hover:shadow-md hover:translate-x-2 transition-transform">
+                        <div class="flex items-start justify-between mb-6">
+                            <div>
+                                <h4 class="font-bold text-lg text-dark dark:text-white font-serif">Zikra Mahkota Hasan</h4>
+                                <span class="text-xs text-gray-400 uppercase tracking-widest mt-1 block">Ketua Umum Osis</span>
+                            </div>
+                            <i data-lucide="quote" class="w-8 h-8 text-primary/10"></i>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-loose italic font-light">
+                            "Hatur Nuhun, untuk 1 Periode Anu luar biasa. Sanajan urang berpisah, memori ini akan selalu pulang ke hati yang sama. Sarukses kabeh hampura teu bisa masihan anu terbaik!"
+                        </p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 p-8 shadow-sm border-l-4 border-gray-200 dark:border-slate-600 reveal transition-colors duration-500 hover:shadow-md hover:translate-x-2 transition-transform delay-100">
+                        <div class="flex items-start justify-between mb-6">
+                            <div>
+                                <h4 class="font-bold text-lg text-dark dark:text-white font-serif">Riki Jatnika</h4>
+                                <span class="text-xs text-gray-400 uppercase tracking-widest mt-1 block">Wakil Ketua Umum</span>
+                            </div>
+                            <i data-lucide="quote" class="w-8 h-8 text-primary/10"></i>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-loose italic font-light">
+                            "Tidak ada kata perpisahan, hanya jeda sebelum pertemuan sukses kita selanjutnya. Keep in touch everyone!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-20 border-t border-gray-800 transition-colors duration-700">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <span class="text-2xl font-serif font-bold cursor-hover block mb-2">Osis<span class="text-primary">.</span>24</span>
+                <p class="text-gray-500 text-[10px] uppercase tracking-[0.2em]">Est. 2024 • Osis MA MU</p>
+            </div>
+            <div class="flex gap-8">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors cursor-hover transform hover:scale-110 duration-300"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors cursor-hover transform hover:scale-110 duration-300"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors cursor-hover transform hover:scale-110 duration-300"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-[60] bg-black/95 hidden flex items-center justify-center opacity-0 transition-opacity duration-500 cursor-auto backdrop-blur-sm">
+        <button onclick="closeLightbox()" class="absolute top-8 right-8 text-white/50 hover:text-white transition cursor-hover hover:rotate-90 duration-300">
+            <i data-lucide="x" class="w-10 h-10"></i>
+        </button>
+        <img id="lightbox-img" src="" class="max-h-[85vh] max-w-[90vw] object-contain shadow-2xl rounded-sm scale-95 transition-transform duration-500">
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        
+        // Init Icons
+        lucide.createIcons();
+
+        // --- PRELOADER ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            const loaderLine = preloader.querySelector('.loader-line');
+            
+            // Simulate loading progress
+            setTimeout(() => { loaderLine.style.width = '100%'; }, 100);
+
+            // Fade out
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+            }, 1800);
+        });
+
+        // --- THEME TOGGLE LOGIC ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // --- MODERN CURSOR LOGIC ---
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot follows instantly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline follows with slight delay
+            cursorOutline.style.left = `${posX}px`;
+            cursorOutline.style.top = `${posY}px`;
+        });
+
+        window.addEventListener('mousedown', () => {
+            document.body.classList.add('clicking');
+        });
+
+        window.addEventListener('mouseup', () => {
+            document.body.classList.remove('clicking');
+        });
+
+        // Hover Effect Magnetic
+        const hoverElements = document.querySelectorAll('a, button, .cursor-hover, input, textarea, select');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // --- SCROLL ANIMATIONS ---
+        
+        // Navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white/80', 'dark:bg-dark/80', 'backdrop-blur-md', 'shadow-sm', 'h-20');
+                nav.classList.remove('h-24');
+            } else {
+                nav.classList.remove('bg-white/80', 'dark:bg-dark/80', 'backdrop-blur-md', 'shadow-sm', 'h-20');
+                nav.classList.add('h-24');
+            }
+        });
+
+        // Parallax
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const bg = document.getElementById('hero-bg');
+            // Sedikit diperhalus gerakannya
+            if (bg) {
+                bg.style.transform = `translate3d(0, ${scrolled * 0.4}px, 0) scale(1.05)`;
+            }
+        });
+
+        // Cinematic Reveal with IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Trigger once
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -100px 0px' }); // Adjusted rootMargin for better timing
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // --- LIGHTBOX ---
+        function openLightbox(element) {
+            const lightbox = document.getElementById('lightbox');
+            const img = element.querySelector('img');
+            const targetImg = document.getElementById('lightbox-img');
+            
+            targetImg.src = img.src;
+            lightbox.classList.remove('hidden');
+            void lightbox.offsetWidth; // trigger reflow
+            lightbox.classList.remove('opacity-0');
+            targetImg.classList.remove('scale-95');
+            document.body.style.overflow = 'hidden';
+            document.body.style.cursor = 'auto';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            const targetImg = document.getElementById('lightbox-img');
+            
+            lightbox.classList.add('opacity-0');
+            targetImg.classList.add('scale-95');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                document.body.style.cursor = 'none';
+            }, 500);
+        }
+
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') closeLightbox();
+        });
+
+        // --- GUESTBOOK ---
+        function addMessage(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('senderName');
+            const msgInput = document.getElementById('senderMsg');
+            const container = document.getElementById('wall-container');
+            
+            const name = nameInput.value || "Anonymous";
+            const msg = msgInput.value;
+
+            const newCard = document.createElement('div');
+            newCard.className = 'bg-white dark:bg-slate-800 p-8 shadow-sm border-l-4 border-primary reveal active transition-colors duration-500 hover:shadow-md hover:translate-x-2 transition-transform';
+            
+            newCard.innerHTML = `
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <h4 class="font-bold text-lg text-dark dark:text-white font-serif">${name}</h4>
+                        <span class="text-xs text-gray-400 uppercase tracking-widest mt-1 block">Baru Saja</span>
+                    </div>
+                    <i data-lucide="quote" class="w-8 h-8 text-primary/10"></i>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 text-sm leading-loose italic font-light">"${msg}"</p>
+            `;
+
+            container.insertBefore(newCard, container.firstChild);
+            lucide.createIcons(); 
+            
+            msgInput.value = '';
+            nameInput.value = '';
+        }
+
+        // --- MUSIC PLAYER ---
+        // Audio Element
+        const audio = document.getElementById('bg-audio');
+        const visualizerBars = document.querySelectorAll('.music-visualizer div');
+        let visualizerInterval;
+        let isAudioBusy = false; // Mencegah race condition
+
+        function toggleMusic() {
+            if (isAudioBusy) return;
+            
+            const btn = document.getElementById('audio-btn');
+            
+            // Clear existing content inside button first to avoid stacking or duplicate icons
+            // We want to replace the whole icon element
+            
+            if (audio.paused) {
+                isAudioBusy = true;
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Success - Change to Pause Icon
+                        btn.innerHTML = `<i data-lucide="pause" class="w-4 h-4" id="audio-icon"></i>`;
+                        lucide.createIcons();
+                        startVisualizer();
+                        isAudioBusy = false;
+                    })
+                    .catch(error => {
+                        isAudioBusy = false;
+                        if (error.name === 'AbortError') {
+                            console.log('Playback aborted');
+                        } else {
+                            alert("Gagal memutar musik: " + error.message);
+                        }
+                    });
+                }
+            } else {
+                audio.pause();
+                // Change to Play Icon
+                btn.innerHTML = `<i data-lucide="play" class="w-4 h-4" id="audio-icon"></i>`;
+                lucide.createIcons();
+                stopVisualizer();
+                // No promise for pause, so busy flag not strictly needed for async, but good for debounce
+            }
+        }
+
+        function startVisualizer() {
+            visualizerInterval = setInterval(() => {
+                visualizerBars.forEach(bar => {
+                    const height = Math.floor(Math.random() * 16) + 4; // Random height between 4 and 20
+                    bar.style.height = `${height}px`;
+                });
+            }, 100);
+        }
+
+        function stopVisualizer() {
+            clearInterval(visualizerInterval);
+            visualizerBars.forEach(bar => {
+                bar.style.height = '4px'; // Reset height
+            });
+        }
+    </script>
+</body>
+</html>
